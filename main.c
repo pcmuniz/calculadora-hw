@@ -1,5 +1,9 @@
 // PABLO
-// DIA 30/08/2024, 9:03:20am
+// DIA 29/08/2024, 10:25:40am -> Criação da função DecPraBi
+// DIA 29/08/2024, 5:47:05pm -> Criação da função DecPraOcta
+// DIA 30/08/2024, 8:24:15am -> Criação da função DecPraHexa 
+// DIA 30/08/2024, 9:03:20am -> Criação da função DecPraBCD
+// DIA 30/08/2024, 11:22:37am -> Criação da função DecPraComplemento2
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,6 +12,7 @@ int DecPraBi(int decimal);
 int DecPraOcta(int decimal);
 int DecPraHexa(int decimal);
 int DecPraBCD(int decimal);
+void DecParaComplemento2(int decimal);
 
 int main() {
   int numero;
@@ -18,6 +23,7 @@ int main() {
   DecPraOcta(numero);
   DecPraHexa(numero);
   DecPraBCD(numero);
+  DecParaComplemento2(numero);
 
   return 0;
 }
@@ -124,4 +130,34 @@ int DecPraBCD(int decimal) {
    printf("\n");
   
   return 0;
+}
+
+void DecParaComplemento2(int decimal) {
+    int bits = 16;
+
+  if (decimal >= 0) {
+        unsigned int binario = decimal & 0xFFFF;
+
+        printf("Complemento a 2 (positivo):");
+        for (int i = bits - 1; i >= 0; i--) {
+            printf("%d", (binario >> i) & 1);
+            if (i % 4 == 0 && i != 0) {
+                printf(" ");
+            }
+        }
+        printf("\n");
+    } else {
+        unsigned int positivo = -decimal;
+        unsigned int binario = ~positivo + 1;
+        binario &= 0xFFFF;
+
+        printf("Complemento a 2 (negativo):");
+        for (int i = bits - 1; i >= 0; i--) {
+            printf("%d", (binario >> i) & 1);
+            if (i % 4 == 0 && i != 0) {
+                printf(" ");
+            }
+        }
+        printf("\n");
+    }
 }
