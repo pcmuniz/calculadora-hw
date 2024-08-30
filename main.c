@@ -4,27 +4,41 @@
 // DIA 30/08/2024, 8:24:15am -> Criação da função DecPraHexa 
 // DIA 30/08/2024, 9:03:20am -> Criação da função DecPraBCD
 // DIA 30/08/2024, 11:22:37am -> Criação da função DecPraComplemento2
+// DIA 30/08/2024, 2:31:11PM -> Criação das funções BitsFloat e BitsDouble
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int DecPraBi(int decimal);
 int DecPraOcta(int decimal);
 int DecPraHexa(int decimal);
 int DecPraBCD(int decimal);
 void DecParaComplemento2(int decimal);
+void BitsFloat(float numero);
+void BitsDouble(double numero);
 
 int main() {
   int numero;
+  float numero_f;
+  double numero_d;
 
+  printf("Número inteiro: ");
   scanf("%d", &numero);
+  printf("Número float: ");
+  scanf("%f", &numero_f);
+  printf("Número double: ");
+  scanf("%lf", &numero_d);
 
   DecPraBi(numero);
   DecPraOcta(numero);
   DecPraHexa(numero);
   DecPraBCD(numero);
   DecParaComplemento2(numero);
+  BitsFloat(numero_f);
+  BitsDouble(numero_d);
 
+  
   return 0;
 }
 
@@ -160,4 +174,50 @@ void DecParaComplemento2(int decimal) {
         }
         printf("\n");
     }
+}
+
+void BitsFloat(float numero) {
+    unsigned char *p = (unsigned char*)&numero;
+    unsigned int bits = 0;
+
+    for (int i = sizeof(float) - 1; i >= 0; i--) {
+        bits = (bits << 8) | p[i];
+    }
+
+    int sinal = (bits >> 31) & 1;
+    int expoente = (bits >> 23) & 0xFF;
+    int frac = bits & 0x7FFFFF;
+
+    printf("Representação em bits para float:\n");
+    printf("Sinal: %d\n", sinal);
+    printf("Expoente: %d\n", expoente);
+    printf("Expoente com viés: %d\n", expoente - 127);
+    printf("Frações: ");
+    for (int i = 22; i >= 0; i--) {
+        printf("%d", (frac >> i) & 1);
+    }
+    printf("\n");
+}
+
+void BitsDouble(double numero) {
+    unsigned char *p = (unsigned char*)&numero;
+    unsigned long long bits = 0;
+
+    for (int i = sizeof(double) - 1; i >= 0; i--) {
+        bits = (bits << 8) | p[i];
+    }
+
+    int sinal = (bits >> 63) & 1;
+    int expoente = (bits >> 52) & 0x7FF;
+    long long frac = bits & 0xFFFFFFFFFFFFF;
+
+    printf("Representação em bits para double:\n");
+    printf("Sinal: %d\n", sinal);
+    printf("Expoente: %d\n", expoente);
+    printf("Expoente com viés: %d\n", expoente - 1023);
+    printf("Frações: ");
+    for (int i = 51; i >= 0; i--) {
+        printf("%d", (frac >> i) & 1);
+    }
+    printf("\n");
 }
